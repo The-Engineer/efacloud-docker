@@ -5,6 +5,7 @@ services:
       context: .
     volumes:
       - ./efa-config:/var/www/html/config
+      #- ./efa:/var/www/html
     ports:
       - 8080:80
 
@@ -35,6 +36,5 @@ services:
 # $ docker-compuse up --build
 # http://localhost:8080/install.php
 
-# https://entwickler.de/docker/mit-php-in-den-containerhafen-einfahren
 # https://www.efacloud.org/src/
 # https://hub.docker.com/_/php
