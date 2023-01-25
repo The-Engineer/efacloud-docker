@@ -1,0 +1,40 @@
+services:
+  efa:
+    container_name: efacloud-app
+    build:
+      context: .
+    volumes:
+      - ./efa-config:/var/www/html/config
+    ports:
+      - 8080:80
+
+  mysql:
+    image: mysql:8.0
+    container_name: efacloud-db
+    command: [ '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+    #volumes:
+    #  - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=efaCloud
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - 8081:80
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+
+# $ docker rm efacloud-app && docker rmi efacloud_efa && docker-compose up
+# $ docker-compuse up --build
+# http://localhost:8080/install.php
+
+# https://entwickler.de/docker/mit-php-in-den-containerhafen-einfahren
+# https://www.efacloud.org/src/
+# https://hub.docker.com/_/php
