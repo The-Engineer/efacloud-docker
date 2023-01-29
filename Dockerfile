@@ -1,15 +1,29 @@
 FROM php:7.4-apache
 
-RUN apt-get clean
-RUN apt-get update
+RUN apt clean
+RUN apt update && apt upgrade -y
 
 # install extensions
-RUN apt-get install -y \
-        libzip-dev \
-        zip \
-  && docker-php-ext-install zip
-RUN docker-php-ext-install calendar exif gettext mysqli pdo_mysql sockets
+RUN apt install -y libzip-dev zip libbz2-dev libpng-dev libxslt1-dev
+RUN rm -rf /var/lib/apt/lists/*
 
-# add efa installer
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install calendar exif gettext mysqli pdo_mysql sockets
+RUN docker-php-ext-install bz2 gd xsl
+
+# Use the default production configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# Enable apache modules
+RUN a2enmod rewrite headers
+
+# set apache dir as working dir
 WORKDIR /var/www/html
-COPY install.php .
+
+# download efa installer
+RUN curl https://www.efacloud.org/src/efacloud_install.zip --output efacloud_install.zip
+RUN unzip efacloud_install.zip
+RUN rm efacloud_install.zip
+
+# set proper permissions on installer file
+RUN chown -R www-data:www-data /var/www/html

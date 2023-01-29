@@ -3,16 +3,17 @@ services:
     container_name: efacloud-app
     build:
       context: .
-    volumes:
-      - ./efa-config:/var/www/html/config
+    #volumes:
+      #- ./efa-config:/var/www/html/config
       #- ./efa:/var/www/html
     ports:
       - 8080:80
+    #depends_on:
+    #  - mariadb
 
-  mysql:
-    image: mysql:8.0
+  mariadb:
+    image: mariadb:10.4
     container_name: efacloud-db
-    command: [ '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
     #volumes:
     #  - ./mysql:/var/lib/mysql
     environment:
@@ -32,7 +33,6 @@ services:
       - PMA_PASSWORD=${MYSQL_ROOT_PASSWORD}
 
 
-# $ docker rm efacloud-app && docker rmi efacloud_efa && docker-compose up
 # $ docker-compuse up --build
 # http://localhost:8080/install.php
 
