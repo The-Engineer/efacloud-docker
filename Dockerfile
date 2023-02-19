@@ -13,6 +13,7 @@ RUN docker-php-ext-install bz2 gd xsl
 
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+# RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 # Enable apache modules
 RUN a2enmod rewrite headers
